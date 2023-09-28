@@ -21,8 +21,8 @@ const LoginPage = () => {
   const usernameEl = useRef(null);
   useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
-    username: yup.string().required(t('errors.required')),
-    password: yup.string().required(t('errors.required')),
+    username: yup.string().trim().required(t('errors.required')),
+    password: yup.string().trim().required(t('errors.required')),
   });
 
   const { logIn } = useAuth();

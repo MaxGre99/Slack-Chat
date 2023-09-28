@@ -21,8 +21,13 @@ const SignupPage = () => {
   const usernameEl = useRef(null);
   useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
-    username: yup.string().required(t('errors.required')).min(3, t('errors.usernameLength')).max(20, t('errors.usernameLength')),
-    password: yup.string().required(t('errors.required')).min(6, t('errors.passwordLength')),
+    username: yup
+      .string()
+      .trim()
+      .required(t('errors.required'))
+      .min(3, t('errors.usernameLength'))
+      .max(20, t('errors.usernameLength')),
+    password: yup.string().trim().required(t('errors.required')).min(6, t('errors.passwordLength')),
     confirmPassword: yup.string().oneOf([yup.ref('password')], t('errors.passwordShouldMatch')),
   });
 
@@ -87,7 +92,7 @@ const SignupPage = () => {
                     className={formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.username ? 'is-invalid' : ''}
                     required
                     value={formik.values.username}
-                    // onBlur={formik.handleBlur}
+                    onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
                   <div className="invalid-tooltip">{formik.errors.username}</div>
@@ -106,7 +111,7 @@ const SignupPage = () => {
                     className={formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.password ? 'is-invalid' : ''}
                     required
                     value={formik.values.password}
-                    // onBlur={formik.handleBlur}
+                    onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
                   <div className="invalid-tooltip">{formik.errors.password}</div>

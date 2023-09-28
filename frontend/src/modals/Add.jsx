@@ -29,7 +29,7 @@ const Add = ({
   const channelsNames = allChannels.map((channel) => channel.name);
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required(t('errors.required')).notOneOf(channelsNames, t('errors.shouldBeUnique')),
+    name: yup.string().trim().required(t('errors.required')).notOneOf(channelsNames, t('errors.shouldBeUnique')),
   });
 
   const formik = useFormik({
