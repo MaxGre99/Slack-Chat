@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import Rollbar from 'rollbar';
+// import Rollbar from 'rollbar';
 import {
   Provider as RollbarProvider,
   ErrorBoundary,
@@ -14,10 +14,10 @@ import store from './slices/index';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const rollbarConfig = new Rollbar({
+const rollbarConfig = {
   accessToken: '754eab26a4db48c0a26588006a78b5ee',
   environment: 'testenv',
-});
+};
 
 const root = ReactDOM.createRoot(document.getElementById('chat'));
 root.render(
