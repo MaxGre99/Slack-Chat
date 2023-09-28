@@ -7,6 +7,8 @@ const Rename = ({
   socket,
   chosenChannel,
   setGeneralChannel,
+  successNotify,
+  errorNotify,
 }) => {
   const { t } = useTranslation();
   return (
@@ -28,9 +30,15 @@ const Rename = ({
           <Button
             variant="danger"
             onClick={() => {
-              socket.emit('removeChannel', { id: chosenChannel.id });
-              onClose();
-              setGeneralChannel();
+              socket.emit('removeChannel', { id: chosenChannel.id }, (response) => {
+                if (response.status === 'ok') {
+                  onClose();
+                  setGeneralChannel();
+                  successNotify(t('toasts.removeChannel'));
+                } else {
+                  errorNotify(response.error);
+                }
+              });
             }}
           >
             {t('modals.submit')}

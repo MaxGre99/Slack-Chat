@@ -12,6 +12,7 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import Channels from './Channels';
@@ -20,6 +21,32 @@ import getModal from '../modals/index.js';
 
 // Инициализация сокета
 const socket = io('http://localhost:3000');
+
+// Toastify
+const successNotify = (text) => {
+  toast.success(text, {
+    position: toast.POSITION.TOP_RIGHT,
+  });
+};
+const errorNotify = (text) => {
+  toast.error(text, {
+    position: toast.POSITION.TOP_RIGHT,
+  });
+};
+/* const notify = () => {
+  toast.warn("Warning Notification !", {
+    position: toast.POSITION.BOTTOM_LEFT
+  });
+
+  toast.info("Info Notification !", {
+    position: toast.POSITION.BOTTOM_CENTER
+  });
+
+  toast("Custom Style Notification with css class!", {
+    position: toast.POSITION.BOTTOM_RIGHT,
+    className: 'foo-bar'
+  });
+}; */
 
 // Cам компонент
 const MainPage = () => {
@@ -55,7 +82,7 @@ const MainPage = () => {
         dispatch(messagesActions.addMessages(messages));
         setChosenChannel(channels.find((channel) => channel.id === currentChannelId));
       } catch (error) {
-        //
+        errorNotify(error);
       }
     };
     fetchData();
@@ -184,6 +211,8 @@ const MainPage = () => {
           socket={socket}
           chosenChannel={chosenChannel}
           setGeneralChannel={setGeneralChannel}
+          successNotify={successNotify}
+          errorNotify={errorNotify}
         />
       )}
     </Container>

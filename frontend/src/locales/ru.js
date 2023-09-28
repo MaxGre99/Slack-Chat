@@ -49,5 +49,10 @@ export default {
       userAlreadyExists: 'Такой пользователь уже существует',
       shouldBeUnique: 'Должно быть уникальным',
     },
+    toasts: {
+      addChannel: 'Канал создан',
+      renameChannel: 'Канал переименован',
+      removeChannel: 'Канал удалён',
+    },
   },
 };

@@ -11,7 +11,13 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-const Rename = ({ onClose, socket, chosenChannel }) => {
+const Rename = ({
+  onClose,
+  socket,
+  chosenChannel,
+  successNotify,
+  errorNotify,
+}) => {
   const { t } = useTranslation();
   const renameChannelInput = useRef();
   useEffect(() => renameChannelInput.current.select(), []);
@@ -30,8 +36,14 @@ const Rename = ({ onClose, socket, chosenChannel }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      socket.emit('renameChannel', values);
-      onClose();
+      socket.emit('renameChannel', values, (response) => {
+        if (response.status === 'ok') {
+          onClose();
+          successNotify(t('toasts.renameChannel'));
+        } else {
+          errorNotify(response.error);
+        }
+      });
     },
   });
 

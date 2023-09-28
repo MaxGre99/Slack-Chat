@@ -9,6 +9,8 @@ import {
 import { Button, Container, Navbar } from 'react-bootstrap';
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../contexts/AuthContext';
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
@@ -84,6 +86,7 @@ const App = () => (
           <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </div>
+      <ToastContainer />
     </BrowserRouter>
   </AuthProvider>
 );

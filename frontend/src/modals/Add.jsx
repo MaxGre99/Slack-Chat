@@ -10,7 +10,12 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-const Add = ({ onClose, socket }) => {
+const Add = ({
+  onClose,
+  socket,
+  successNotify,
+  errorNotify,
+}) => {
   const { t } = useTranslation();
   const addChannelInput = useRef();
   useEffect(() => addChannelInput.current.focus(), []);
@@ -28,8 +33,14 @@ const Add = ({ onClose, socket }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      socket.emit('newChannel', values);
-      onClose();
+      socket.emit('newChannel', values, (response) => {
+        if (response.status === 'ok') {
+          onClose();
+          successNotify(t('toasts.addChannel'));
+        } else {
+          errorNotify(response.error);
+        }
+      });
     },
   });
 
