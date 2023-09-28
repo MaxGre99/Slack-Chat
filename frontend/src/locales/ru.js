@@ -42,7 +42,7 @@ export default {
     errors: {
       required: 'Обязательное поле',
       notCorrect: 'Неверные имя пользователя или пароль',
-      messageNotSent: 'Сообщение не отправлено!',
+      connectionError: 'Ошибка соединения',
       passwordLength: 'Не менее 6 символов',
       usernameLength: 'От 3 до 20 символов',
       passwordShouldMatch: 'Пароли должны совпадать',

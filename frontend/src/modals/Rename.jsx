@@ -1,6 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-// import _ from 'lodash';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -10,6 +8,12 @@ import {
   CloseButton,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
+
+// LeoProfanity
+filter.add(filter.getDictionary('en'));
+filter.add(filter.getDictionary('fr'));
+filter.add(filter.getDictionary('ru'));
 
 const Rename = ({
   onClose,
@@ -17,13 +21,13 @@ const Rename = ({
   chosenChannel,
   successNotify,
   errorNotify,
+  allChannels,
 }) => {
   const { t } = useTranslation();
   const renameChannelInput = useRef();
   useEffect(() => renameChannelInput.current.select(), []);
 
-  const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
-  const channelsNames = channels.map((channel) => channel.name);
+  const channelsNames = allChannels.map((channel) => channel.name);
 
   const validationSchema = yup.object().shape({
     name: yup.string().required(t('errors.required')).notOneOf(channelsNames, t('errors.shouldBeUnique')),
@@ -36,12 +40,12 @@ const Rename = ({
     },
     validationSchema,
     onSubmit: (values) => {
-      socket.emit('renameChannel', values, (response) => {
+      socket.emit('renameChannel', { id: values.id, name: filter.clean(values.name) }, (response) => {
         if (response.status === 'ok') {
           onClose();
           successNotify(t('toasts.renameChannel'));
         } else {
-          errorNotify(response.error);
+          errorNotify(t('errors.connectionError'));
         }
       });
     },

@@ -13,6 +13,7 @@ import io from 'socket.io-client';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import filter from 'leo-profanity';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import Channels from './Channels';
@@ -33,20 +34,11 @@ const errorNotify = (text) => {
     position: toast.POSITION.TOP_RIGHT,
   });
 };
-/* const notify = () => {
-  toast.warn("Warning Notification !", {
-    position: toast.POSITION.BOTTOM_LEFT
-  });
 
-  toast.info("Info Notification !", {
-    position: toast.POSITION.BOTTOM_CENTER
-  });
-
-  toast("Custom Style Notification with css class!", {
-    position: toast.POSITION.BOTTOM_RIGHT,
-    className: 'foo-bar'
-  });
-}; */
+// LeoProfanity
+filter.add(filter.getDictionary('en'));
+filter.add(filter.getDictionary('fr'));
+filter.add(filter.getDictionary('ru'));
 
 // Cам компонент
 const MainPage = () => {
@@ -82,7 +74,7 @@ const MainPage = () => {
         dispatch(messagesActions.addMessages(messages));
         setChosenChannel(channels.find((channel) => channel.id === currentChannelId));
       } catch (error) {
-        errorNotify(error);
+        errorNotify(t('errors.connectionError'));
       }
     };
     fetchData();
@@ -97,7 +89,11 @@ const MainPage = () => {
     },
     onSubmit: (values) => {
       let messageAcknowledged = false;
-      socket.emit('newMessage', values, (confirmation) => {
+      socket.emit('newMessage', {
+        body: filter.clean(values.body),
+        channelId: values.channelId,
+        username: values.username,
+      }, (confirmation) => {
         if (confirmation.status === 'ok') {
           messageAcknowledged = true;
         }
@@ -105,7 +101,7 @@ const MainPage = () => {
       setTimeout(() => {
         if (!messageAcknowledged) {
         // Если подтверждение не получено, обработайте это здесь
-          console.log(t('errors.messageNotSent'));
+          errorNotify(t('errors.connectionError'));
         }
       }, 5000);
       formik.values.body = '';
@@ -141,6 +137,35 @@ const MainPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(modalType !== '');
   const onClose = () => setModalIsOpen(!modalIsOpen);
   const ModalComponent = getModal(modalType);
+
+  // Набор useEffect'ов и функций для скролла вниз
+  const messagesBoxRef = useRef(null);
+  const channelsBoxRef = useRef(null);
+
+  useEffect(() => {
+    messagesBoxRef.current = document.getElementById('messages-box');
+    channelsBoxRef.current = document.getElementById('channels-box');
+  }, []);
+
+  const scrollToBottomMessages = () => {
+    if (messagesBoxRef.current) {
+      messagesBoxRef.current.scrollTop = messagesBoxRef.current.scrollHeight;
+    }
+  };
+
+  const scrollToBottomChannels = () => {
+    if (channelsBoxRef.current) {
+      channelsBoxRef.current.scrollTop = channelsBoxRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottomMessages();
+  }, [chosenMessages]);
+
+  useEffect(() => {
+    scrollToBottomChannels();
+  }, [allChannels]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
@@ -213,6 +238,7 @@ const MainPage = () => {
           setGeneralChannel={setGeneralChannel}
           successNotify={successNotify}
           errorNotify={errorNotify}
+          allChannels={allChannels}
         />
       )}
     </Container>

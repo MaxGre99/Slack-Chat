@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -9,19 +8,25 @@ import {
   CloseButton,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
+
+// LeoProfanity
+filter.add(filter.getDictionary('en'));
+filter.add(filter.getDictionary('fr'));
+filter.add(filter.getDictionary('ru'));
 
 const Add = ({
   onClose,
   socket,
   successNotify,
   errorNotify,
+  allChannels,
 }) => {
   const { t } = useTranslation();
   const addChannelInput = useRef();
   useEffect(() => addChannelInput.current.focus(), []);
 
-  const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
-  const channelsNames = channels.map((channel) => channel.name);
+  const channelsNames = allChannels.map((channel) => channel.name);
 
   const validationSchema = yup.object().shape({
     name: yup.string().required(t('errors.required')).notOneOf(channelsNames, t('errors.shouldBeUnique')),
@@ -33,12 +38,12 @@ const Add = ({
     },
     validationSchema,
     onSubmit: (values) => {
-      socket.emit('newChannel', values, (response) => {
+      socket.emit('newChannel', { name: filter.clean(values.name) }, (response) => {
         if (response.status === 'ok') {
           onClose();
           successNotify(t('toasts.addChannel'));
         } else {
-          errorNotify(response.error);
+          errorNotify(t('errors.connectionError'));
         }
       });
     },

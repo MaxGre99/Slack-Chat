@@ -36,7 +36,7 @@ const Rename = ({
                   setGeneralChannel();
                   successNotify(t('toasts.removeChannel'));
                 } else {
-                  errorNotify(response.error);
+                  errorNotify(t('errors.connectionError'));
                 }
               });
             }}
