@@ -10,19 +10,19 @@ import {
   FloatingLabel,
   Col,
 } from 'react-bootstrap';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
-import logo from '../public/Без названия.jpeg';
+import logo from '../public/Авторизация.jpeg';
 
 const LoginPage = () => {
-  const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Username is required'),
-    password: Yup.string().required('Password is required'),
+  const validationSchema = yup.object().shape({
+    username: yup.string().required('Username is required'),
+    password: yup.string().required('Password is required'),
   });
 
   const { logIn } = useAuth();
-  const [loginError, setError] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -45,12 +45,10 @@ const LoginPage = () => {
           );
           logIn();
           navigate('/');
-          setError(false);
-          console.log(localStorage);
+          setLoginError(false);
         }
       } catch (err) {
-        //
-        setError(true);
+        setLoginError(true);
       }
     },
   });
@@ -82,7 +80,6 @@ const LoginPage = () => {
                     required
                     value={formik.values.username}
                     onChange={formik.handleChange}
-                    // onBlur={formik.handleBlur}
                   />
                 </FloatingLabel>
                 <FloatingLabel
@@ -99,7 +96,6 @@ const LoginPage = () => {
                     required
                     value={formik.values.password}
                     onChange={formik.handleChange}
-                    // onBlur={formik.handleBlur}
                   />
                   {loginError && <div className="invalid-tooltip">Неверные имя пользователя или пароль</div>}
                 </FloatingLabel>

@@ -1,22 +1,23 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { actions as channelsActions } from './channelsSlice';
 
 const messagesAdapter = createEntityAdapter();
 // По умолчанию: { ids: [], entities: {} }
 const initialState = messagesAdapter.getInitialState();
 
 const messagesSlice = createSlice({
-  name: 'channels',
+  name: 'messages',
   initialState,
   reducers: {
     addMessage: messagesAdapter.addOne,
     addMessages: messagesAdapter.addMany,
-    // Если нужна дополнительная обработка, то создаем свою функцию
-    removeMessage: (state, { payload }) => {
-      // ...
-      // Внутри можем вызвать метод адаптера
-      messagesAdapter.removeOne(state, payload);
-    },
-    updateMessage: messagesAdapter.updateOne,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(channelsActions.removeChannel, (state, action) => {
+      const channelId = action.payload;
+      const restEntities = Object.values(state.entities).filter((e) => e.channelId !== channelId);
+      messagesAdapter.setAll(state, restEntities);
+    });
   },
 });
 

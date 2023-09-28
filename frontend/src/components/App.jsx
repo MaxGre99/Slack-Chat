@@ -14,6 +14,7 @@ import AuthContext from '../contexts/AuthContext';
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
 import ErrorPage from './ErrorPage';
+import SignupPage from './SignupPage';
 import useAuth from '../hooks/useAuth';
 
 const AuthProvider = ({ children }) => {
@@ -80,6 +81,7 @@ const App = () => (
             )}
           />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </div>
     </BrowserRouter>
