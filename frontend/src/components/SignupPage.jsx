@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
@@ -18,6 +18,8 @@ import logo from '../public/Регистрация.jpg';
 
 const SignupPage = () => {
   const { t } = useTranslation();
+  const usernameEl = useRef(null);
+  useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
     username: yup.string().required(t('errors.required')).min(3, t('errors.usernameLength')).max(20, t('errors.usernameLength')),
     password: yup.string().required(t('errors.required')).min(6, t('errors.passwordLength')),
@@ -77,6 +79,7 @@ const SignupPage = () => {
                   label={t('forms.username')}
                 >
                   <Form.Control
+                    ref={usernameEl}
                     name="username"
                     autoComplete="username"
                     placeholder={t('errors.usernameLength')}
