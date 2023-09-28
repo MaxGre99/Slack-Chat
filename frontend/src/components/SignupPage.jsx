@@ -28,7 +28,7 @@ const SignupPage = () => {
       .min(3, t('errors.usernameLength'))
       .max(20, t('errors.usernameLength')),
     password: yup.string().trim().required(t('errors.required')).min(6, t('errors.passwordLength')),
-    confirmPassword: yup.string().oneOf([yup.ref('password')], t('errors.passwordShouldMatch')),
+    confirmPassword: yup.string().trim().oneOf([yup.ref('password')], t('errors.passwordShouldMatch')),
   });
 
   const { logIn } = useAuth();
@@ -41,8 +41,7 @@ const SignupPage = () => {
       confirmPassword: '',
     },
     validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      resetForm();
+    onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/signup', values);
         if (response.status === 201) {
@@ -55,11 +54,11 @@ const SignupPage = () => {
           );
           logIn();
           navigate('/');
-          console.log(localStorage);
         }
       } catch (err) {
         if (err.response.status === 409) {
           formik.setFieldError('confirmPassword', t('errors.userAlreadyExists'));
+          usernameEl.current.select();
         }
       }
     },
@@ -89,13 +88,13 @@ const SignupPage = () => {
                     autoComplete="username"
                     placeholder={t('errors.usernameLength')}
                     id="username"
-                    className={formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.username ? 'is-invalid' : ''}
+                    className={formik.touched.username && (formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.username) ? 'is-invalid' : ''}
                     required
                     value={formik.values.username}
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
-                  <div className="invalid-tooltip">{formik.errors.username}</div>
+                  <div className="invalid-tooltip">{formik.touched.username && formik.errors.username}</div>
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
@@ -108,13 +107,13 @@ const SignupPage = () => {
                     placeholder={t('errors.passwordLength')}
                     id="password"
                     type="password"
-                    className={formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.password ? 'is-invalid' : ''}
+                    className={formik.touched.password && (formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.password) ? 'is-invalid' : ''}
                     required
                     value={formik.values.password}
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
-                  <div className="invalid-tooltip">{formik.errors.password}</div>
+                  <div className="invalid-tooltip">{formik.touched.password && formik.errors.password}</div>
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
@@ -126,13 +125,13 @@ const SignupPage = () => {
                     placeholder={t('errors.passwordNotMatch')}
                     id="confirmPassword"
                     type="password"
-                    className={formik.errors.confirmPassword && 'is-invalid'}
+                    isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
                     required
                     value={formik.values.confirmPassword}
-                    // onBlur={formik.handleBlur}
+                    onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
-                  <div className="invalid-tooltip">{formik.errors.confirmPassword}</div>
+                  <div className="invalid-tooltip">{formik.touched.confirmPassword && formik.errors.confirmPassword}</div>
                 </FloatingLabel>
                 <Button type="submit" variant="outline-primary" className="w-100">
                   {t('buttons.register')}

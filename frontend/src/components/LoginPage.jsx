@@ -21,8 +21,8 @@ const LoginPage = () => {
   const usernameEl = useRef(null);
   useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
-    username: yup.string().trim().required(t('errors.required')),
-    password: yup.string().trim().required(t('errors.required')),
+    username: yup.string().trim(), // .required(t('errors.required')),
+    password: yup.string().trim(), // .required(t('errors.required')),
   });
 
   const { logIn } = useAuth();
@@ -34,8 +34,7 @@ const LoginPage = () => {
       password: '',
     },
     validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      resetForm();
+    onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/login', values);
         if (response.status === 200) {
@@ -52,6 +51,7 @@ const LoginPage = () => {
       } catch (err) {
         if (err.response.status === 401) {
           formik.setFieldError('password', t('errors.notCorrect'));
+          usernameEl.current.select();
         }
       }
     },
