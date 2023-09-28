@@ -17,8 +17,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const rollbarConfig = new Rollbar({
   accessToken: '754eab26a4db48c0a26588006a78b5ee',
   environment: 'testenv',
-  captureUncaught: true,
-  captureUnhandledRejections: true,
 });
 
 const root = ReactDOM.createRoot(document.getElementById('chat'));
