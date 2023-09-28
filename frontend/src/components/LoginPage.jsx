@@ -54,7 +54,6 @@ const LoginPage = () => {
       }
     },
   });
-  console.log(formik.errors);
 
   return (
     <Container fluid className="h-100">
