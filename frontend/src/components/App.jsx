@@ -6,10 +6,9 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
+import { Button, Container, Navbar } from 'react-bootstrap';
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import AuthContext from '../contexts/AuthContext';
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
@@ -48,11 +47,12 @@ const LoggedInRoute = ({ children }) => {
 
 const LogOutButton = () => {
   const { loggedIn, logOut } = useAuth();
+  const { t } = useTranslation();
 
   return (
     loggedIn && (
       <Button type="button" onClick={logOut}>
-        Выйти
+        {t('buttons.logout')}
       </Button>
     )
   );

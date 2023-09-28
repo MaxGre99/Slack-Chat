@@ -11,28 +11,20 @@ import {
 import axios from 'axios';
 import io from 'socket.io-client';
 import { useFormik } from 'formik';
-// import cn from 'classnames';
-import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import resources from '../locales/index.js';
+import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import Channels from './Channels';
 import Messages from './Messages';
 import getModal from '../modals/index.js';
 
-// Инициализация сокета и i18next
+// Инициализация сокета
 const socket = io('http://localhost:3000');
-
-const i18n = i18next.createInstance();
-i18n.use(initReactI18next).init({
-  resources,
-  lng: 'ru',
-});
 
 // Cам компонент
 const MainPage = () => {
   // Переменные и функции
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [chosenChannel, setChosenChannel] = useState({});
   const messageInput = useRef();
@@ -86,7 +78,7 @@ const MainPage = () => {
       setTimeout(() => {
         if (!messageAcknowledged) {
         // Если подтверждение не получено, обработайте это здесь
-          console.log('Не отправилось!');
+          console.log(t('errors.messageNotSent'));
         }
       }, 5000);
       formik.values.body = '';
@@ -166,19 +158,19 @@ const MainPage = () => {
                 </b>
               </p>
               <span className="text-muted">
-                {i18n.t('count.messageCount', { count: chosenMessages.length })}
+                {t('count.messageCount', { count: chosenMessages.length })}
               </span>
             </div>
             <Messages chosenMessages={chosenMessages} />
             <div className="mt-auto px-5 py-3">
               <Form noValidate className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
                 <InputGroup hasValidation={formik.values.body.length === 0 && true}>
-                  <Form.Control ref={messageInput} name="body" aria-label="Новое сообщение" placeholder="Введите сообщение..." className="border-0 p-0 ps-2" value={formik.values.body} onChange={formik.handleChange} />
+                  <Form.Control ref={messageInput} name="body" aria-label={t('forms.newMessage')} placeholder={t('forms.inputMessage')} className="border-0 p-0 ps-2" value={formik.values.body} onChange={formik.handleChange} />
                   <Button type="submit" variant="group-vertical" disabled={formik.values.body.length === 0 && true}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                       <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
                     </svg>
-                    <span className="visually-hidden">Отправить</span>
+                    <span className="visually-hidden">{t('forms.send')}</span>
                   </Button>
                 </InputGroup>
               </Form>

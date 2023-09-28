@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   Dropdown,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const NonRemovableChannelButton = ({ chosenChannel, channel }) => (
   <Button
@@ -21,43 +22,46 @@ const RemovableChannelButton = ({
   channel,
   setModal,
   onClose,
-}) => (
-  <Dropdown as={ButtonGroup} className="d-flex">
-    <Button
-      className="w-100 rounded-0 text-start text-truncate"
-      variant={chosenChannel.id === channel.id && 'secondary'}
-    >
-      <span className="me-1">#</span>
-      {channel.name}
-    </Button>
-    {/* !!! */}
-    <Dropdown.Toggle
-      id={channel.id}
-      className="flex-grow-0 dropdown-toggle-split"
-      variant={chosenChannel.id === channel.id && 'secondary'}
-    >
-      <span className="visually-hidden">Управление каналом</span>
-    </Dropdown.Toggle>
-    <Dropdown.Menu aria-labelledby={channel.id}>
-      <Dropdown.Item
-        onClick={() => {
-          setModal('removing');
-          onClose();
-        }}
+}) => {
+  const { t } = useTranslation();
+  return (
+    <Dropdown as={ButtonGroup} className="d-flex">
+      <Button
+        className="w-100 rounded-0 text-start text-truncate"
+        variant={chosenChannel.id === channel.id && 'secondary'}
       >
-        Удалить
-      </Dropdown.Item>
-      <Dropdown.Item
-        onClick={() => {
-          setModal('renaming');
-          onClose();
-        }}
+        <span className="me-1">#</span>
+        {channel.name}
+      </Button>
+      {/* !!! */}
+      <Dropdown.Toggle
+        id={channel.id}
+        className="flex-grow-0 dropdown-toggle-split"
+        variant={chosenChannel.id === channel.id && 'secondary'}
       >
-        Переименовать
-      </Dropdown.Item>
-    </Dropdown.Menu>
-  </Dropdown>
-);
+        <span className="visually-hidden">{t('descriptions.channelControl')}</span>
+      </Dropdown.Toggle>
+      <Dropdown.Menu aria-labelledby={channel.id}>
+        <Dropdown.Item
+          onClick={() => {
+            setModal('removing');
+            onClose();
+          }}
+        >
+          {t('buttons.remove')}
+        </Dropdown.Item>
+        <Dropdown.Item
+          onClick={() => {
+            setModal('renaming');
+            onClose();
+          }}
+        >
+          {t('buttons.rename')}
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
 
 const Channels = ({
   chosenChannel,

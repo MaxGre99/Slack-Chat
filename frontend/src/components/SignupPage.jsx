@@ -10,16 +10,18 @@ import {
   FloatingLabel,
   Col,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import logo from '../public/Регистрация.jpg';
 
 const SignupPage = () => {
+  const { t } = useTranslation();
   const validationSchema = yup.object().shape({
-    username: yup.string().required('Обязательное поле').min(3, 'От 3 до 20 символов').max(20, 'От 3 до 20 символов'),
-    password: yup.string().required('Обязательное поле').min(6, 'Не менее 6 символов'),
-    confirmPassword: yup.string().oneOf([yup.ref('password')], 'Пароли не совпадают'),
+    username: yup.string().required(t('errors.required')).min(3, t('errors.usernameLength')).max(20, t('errors.usernameLength')),
+    password: yup.string().required(t('errors.required')).min(6, t('errors.passwordLength')),
+    confirmPassword: yup.string().oneOf([yup.ref('password')], t('errors.passwordShouldMatch')),
   });
 
   const { logIn } = useAuth();
@@ -50,7 +52,7 @@ const SignupPage = () => {
         }
       } catch (err) {
         if (err.response.status === 409) {
-          formik.setFieldError('confirmPassword', 'Такой пользователь уже существует');
+          formik.setFieldError('confirmPassword', t('errors.userAlreadyExists'));
         }
       }
     },
@@ -63,23 +65,23 @@ const SignupPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
               <div>
-                <img src={logo} className="rounded-circle" alt="Регистрация" />
+                <img src={logo} className="rounded-circle" alt={t('descriptions.registration')} />
               </div>
               <Form
                 className="w-50"
                 onSubmit={formik.handleSubmit}
               >
-                <h1 className="text-center mb-4">Регистрация</h1>
+                <h1 className="text-center mb-4">{t('descriptions.registration')}</h1>
                 <FloatingLabel
                   className="mb-3"
-                  label="Имя пользователя"
+                  label={t('forms.username')}
                 >
                   <Form.Control
                     name="username"
                     autoComplete="username"
-                    placeholder="От 3 до 20 символов"
+                    placeholder={t('errors.usernameLength')}
                     id="username"
-                    className={formik.errors.username && 'is-invalid'}
+                    className={formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.username ? 'is-invalid' : ''}
                     required
                     value={formik.values.username}
                     // onBlur={formik.handleBlur}
@@ -89,16 +91,16 @@ const SignupPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label="Пароль"
+                  label={t('forms.password')}
                 >
                   <Form.Control
                     name="password"
                     aria-describedby="passwordHelpBlock"
                     autoComplete="new-password"
-                    placeholder="Не менее 6 символов"
+                    placeholder={t('errors.passwordLength')}
                     id="password"
                     type="password"
-                    className={formik.errors.password && 'is-invalid'}
+                    className={formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.password ? 'is-invalid' : ''}
                     required
                     value={formik.values.password}
                     // onBlur={formik.handleBlur}
@@ -108,12 +110,12 @@ const SignupPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label="Подтвердите пароль"
+                  label={t('forms.confirmPassword')}
                 >
                   <Form.Control
                     name="confirmPassword"
                     autoComplete="new-password"
-                    placeholder="Пароли должны совпадать"
+                    placeholder={t('errors.passwordNotMatch')}
                     id="confirmPassword"
                     type="password"
                     className={formik.errors.confirmPassword && 'is-invalid'}
@@ -125,7 +127,7 @@ const SignupPage = () => {
                   <div className="invalid-tooltip">{formik.errors.confirmPassword}</div>
                 </FloatingLabel>
                 <Button type="submit" variant="outline-primary" className="w-100">
-                  Зарегистрироваться
+                  {t('buttons.register')}
                 </Button>
               </Form>
             </Card.Body>

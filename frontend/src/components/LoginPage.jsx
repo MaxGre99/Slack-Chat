@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
@@ -10,19 +10,20 @@ import {
   FloatingLabel,
   Col,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import logo from '../public/Авторизация.jpeg';
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const validationSchema = yup.object().shape({
-    username: yup.string().required('Username is required'),
-    password: yup.string().required('Password is required'),
+    username: yup.string().required(t('errors.required')),
+    password: yup.string().required(t('errors.required')),
   });
 
   const { logIn } = useAuth();
-  const [loginError, setLoginError] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -45,13 +46,15 @@ const LoginPage = () => {
           );
           logIn();
           navigate('/');
-          setLoginError(false);
         }
       } catch (err) {
-        setLoginError(true);
+        if (err.response.status === 401) {
+          formik.setFieldError('password', t('errors.notCorrect'));
+        }
       }
     },
   });
+  console.log(formik.errors);
 
   return (
     <Container fluid className="h-100">
@@ -60,23 +63,23 @@ const LoginPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="row p-5">
               <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
-                <img src={logo} className="rounded-circle" alt="Войти" />
+                <img src={logo} className="rounded-circle" alt={t('descriptions.login')} />
               </Col>
               <Form
                 className="col-12 col-md-6 mt-3 mt-mb-0"
                 onSubmit={formik.handleSubmit}
               >
-                <h1 className="text-center mb-4">Войти</h1>
+                <h1 className="text-center mb-4">{t('descriptions.login')}</h1>
                 <FloatingLabel
                   className="mb-3"
-                  label="Ваш ник"
+                  label={t('forms.nickname')}
                   controlId="username"
                 >
                   <Form.Control
                     name="username"
                     autoComplete="username"
-                    placeholder="Ваш ник"
-                    className={loginError && 'is-invalid'}
+                    placeholder={t('forms.nickname')}
+                    className={formik.errors.password === t('errors.notCorrect') || formik.errors.username ? 'is-invalid' : ''}
                     required
                     value={formik.values.username}
                     onChange={formik.handleChange}
@@ -84,30 +87,30 @@ const LoginPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label="Пароль"
+                  label={t('forms.password')}
                   controlId="password"
                 >
                   <Form.Control
                     name="password"
                     autoComplete="current-password"
-                    placeholder="Пароль"
+                    placeholder={t('forms.password')}
                     type="password"
-                    className={loginError && 'is-invalid'}
+                    className={formik.errors.password && 'is-invalid'}
                     required
                     value={formik.values.password}
                     onChange={formik.handleChange}
                   />
-                  {loginError && <div className="invalid-tooltip">Неверные имя пользователя или пароль</div>}
+                  <div className="invalid-tooltip">{formik.errors.password}</div>
                 </FloatingLabel>
                 <Button type="submit" variant="outline-primary" className="w-100 mb-3">
-                  Войти
+                  {t('buttons.login')}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта? </span>
-                <a href="/signup"> Регистрация</a>
+                <span>{t('descriptions.noAccount')}</span>
+                <a href="/signup">{t('descriptions.registration')}</a>
               </div>
             </Card.Footer>
           </Card>

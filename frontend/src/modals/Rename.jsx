@@ -9,17 +9,18 @@ import {
   Button,
   CloseButton,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const Rename = ({ onClose, socket, chosenChannel }) => {
+  const { t } = useTranslation();
   const renameChannelInput = useRef();
   useEffect(() => renameChannelInput.current.select(), []);
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const channelsNames = channels.map((channel) => channel.name);
-  // console.log(channelsNames);
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required('Обязательное поле').notOneOf(channelsNames, 'Должно быть уникальным'),
+    name: yup.string().required(t('errors.required')).notOneOf(channelsNames, t('errors.shouldBeUnique')),
   });
 
   const formik = useFormik({
@@ -37,7 +38,7 @@ const Rename = ({ onClose, socket, chosenChannel }) => {
   return (
     <Modal centered show onHide={() => onClose()}>
       <Modal.Header>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modals.renameTitle')}</Modal.Title>
         <CloseButton onClick={() => onClose()} />
       </Modal.Header>
       <Modal.Body>
@@ -52,14 +53,14 @@ const Rename = ({ onClose, socket, chosenChannel }) => {
               ref={renameChannelInput}
             />
             <Form.Label className="visually-hidden" htmlFor="name">
-              Имя канала
+              {t('modals.channelName')}
             </Form.Label>
             <div className="invalid-feedback">{formik.touched.name && formik.errors.name}</div>
             <div className="d-flex justify-content-end">
               <Button variant="secondary" className="me-2" onClick={() => onClose()}>
-                Отменить
+                {t('modals.decline')}
               </Button>
-              <Button variant="primary" type="submit">Отправить</Button>
+              <Button variant="primary" type="submit">{t('modals.submit')}</Button>
             </div>
           </div>
         </Form>
