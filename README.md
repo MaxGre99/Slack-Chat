@@ -1,4 +1,4 @@
-# Hexlet's [Slack Chat] (https://slack-chat-xr7s.onrender.com/) alike study project:
+# Hexlet's [Slack Chat](https://slack-chat-xr7s.onrender.com/) alike study project:
 
 [![Actions Status](https://github.com/MaxGre99/frontend-bootcamp-project-12/workflows/hexlet-check/badge.svg)](https://github.com/MaxGre99/frontend-bootcamp-project-12/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c93b3451e09debd3845d/maintainability)](https://codeclimate.com/github/MaxGre99/Slack-Chat/maintainability)
@@ -29,14 +29,14 @@ A very sumplified version of Slack Chat. Here you can:
   - Mac / Linux
   - Node.js [>=16.x]
 
-  ### Dependencies:
+  #### Dependencies:
   make install
 
-  ### Build (and dependencies also):
+  #### Build (and dependencies also):
   make build
 
-  ### Server Start:
+  #### Server Start:
   make start
 
-  ### Lint:
+  #### Lint:
   make lint-frontend
