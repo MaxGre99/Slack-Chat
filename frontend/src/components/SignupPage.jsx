@@ -94,7 +94,7 @@ const SignupPage = () => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
-                  <div className="invalid-tooltip">{formik.touched.username && formik.errors.username}</div>
+                  {formik.errors.username && (<div className="invalid-tooltip">{formik.touched.username && formik.errors.username}</div>)}
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
@@ -113,7 +113,7 @@ const SignupPage = () => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
-                  <div className="invalid-tooltip">{formik.touched.password && formik.errors.password}</div>
+                  {formik.errors.password && (<div className="invalid-tooltip">{formik.touched.password && formik.errors.password}</div>)}
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
@@ -131,7 +131,7 @@ const SignupPage = () => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                   />
-                  <div className="invalid-tooltip">{formik.touched.confirmPassword && formik.errors.confirmPassword}</div>
+                  {formik.errors.confirmPassword && (<div className="invalid-tooltip">{formik.touched.confirmPassword && formik.errors.confirmPassword}</div>)}
                 </FloatingLabel>
                 <Button type="submit" variant="outline-primary" className="w-100">
                   {t('buttons.register')}
