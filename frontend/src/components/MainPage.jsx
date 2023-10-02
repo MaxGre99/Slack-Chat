@@ -54,8 +54,6 @@ const MainPage = () => {
     return {};
   };
 
-  const allMessages = useSelector((state) => Object.values(state.messagesReducer.entities));
-  const chosenMessages = allMessages.filter((message) => message.channelId === chosenChannel.id);
   const allChannels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const setGeneralChannel = () => setChosenChannel(allChannels.find((channel) => channel.id === 1));
 
@@ -101,29 +99,17 @@ const MainPage = () => {
   const ModalComponent = getModal(modalType);
 
   // Набор useEffect'ов и функций для скролла вниз
-  const messagesBoxRef = useRef(null);
   const channelsBoxRef = useRef(null);
 
   useEffect(() => {
-    messagesBoxRef.current = document.getElementById('messages-box');
     channelsBoxRef.current = document.getElementById('channels-box');
   }, []);
-
-  const scrollToBottomMessages = () => {
-    if (messagesBoxRef.current) {
-      messagesBoxRef.current.scrollTop = messagesBoxRef.current.scrollHeight;
-    }
-  };
 
   const scrollToBottomChannels = () => {
     if (channelsBoxRef.current) {
       channelsBoxRef.current.scrollTop = channelsBoxRef.current.scrollHeight;
     }
   };
-
-  useEffect(() => {
-    scrollToBottomMessages();
-  }, [chosenMessages]);
 
   useEffect(() => {
     scrollToBottomChannels();
@@ -162,7 +148,6 @@ const MainPage = () => {
           />
         </Col>
         <MessagesBox
-          chosenMessages={chosenMessages}
           chosenChannel={chosenChannel}
           userId={userId}
           socket={socket}

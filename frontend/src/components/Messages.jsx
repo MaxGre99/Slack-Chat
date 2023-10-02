@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Col,
   Form,
@@ -8,7 +9,6 @@ import {
 import { useFormik } from 'formik';
 
 const MessagesBox = ({
-  chosenMessages,
   chosenChannel,
   userId,
   socket,
@@ -18,6 +18,8 @@ const MessagesBox = ({
 }) => {
   const messageInput = useRef();
   const [isSending, setSendingState] = useState(false);
+  const allMessages = useSelector((state) => Object.values(state.messagesReducer.entities));
+  const chosenMessages = allMessages.filter((message) => message.channelId === chosenChannel.id);
 
   // Настройки формы для сообщений
   const formik = useFormik({
@@ -35,15 +37,12 @@ const MessagesBox = ({
       }, (confirmation) => {
         if (confirmation.status === 'ok') {
           setSendingState(false);
-        }
-      });
-      setTimeout(() => {
-        if (isSending) {
-        // Если подтверждение не получено, обработайте это здесь
+        } else {
           errorNotify(t('errors.connectionError'));
         }
-      }, 5000);
+      });
       formik.values.body = '';
+      messageInput.current.focus();
     },
   });
 
@@ -65,7 +64,23 @@ const MessagesBox = ({
       formik.setFieldValue('channelId', chosenChannel.id);
       messageInput.current.focus();
     }
-  }, [chosenChannel, chosenMessages]);
+  }, [chosenChannel]);
+
+  // Набор useEffect'ов и функций для скролла вниз
+  const messagesBoxRef = useRef(null);
+  useEffect(() => {
+    messagesBoxRef.current = document.getElementById('messages-box');
+  }, []);
+
+  const scrollToBottomMessages = () => {
+    if (messagesBoxRef.current) {
+      messagesBoxRef.current.scrollTop = messagesBoxRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottomMessages();
+  }, [chosenMessages]);
 
   return (
     <Col className="p-0 h-100">
@@ -103,7 +118,7 @@ const MessagesBox = ({
                 className="border-0 p-0 ps-2"
                 value={formik.values.body}
                 onChange={formik.handleChange}
-                // disabled={isSending}
+                disabled={isSending}
               />
               <Button type="submit" variant="group-vertical" disabled={formik.values.body.length === 0 && true}/* id="submit" */>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
