@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
@@ -18,8 +18,8 @@ import logo from '../public/Регистрация.jpg';
 
 const SignupPage = () => {
   const { t } = useTranslation();
-  // const usernameEl = useRef(null);
-  // useEffect(() => usernameEl.current.focus(), []);
+  const usernameEl = useRef(null);
+  useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -58,7 +58,7 @@ const SignupPage = () => {
       } catch (err) {
         if (err.response.status === 409) {
           formik.setFieldError('confirmPassword', t('errors.userAlreadyExists'));
-          // usernameEl.current.select();
+          usernameEl.current.select();
         }
       }
     },
@@ -87,13 +87,13 @@ const SignupPage = () => {
                 <FloatingLabel
                   className="mb-3"
                   label={t('forms.username')}
+                  controlId="username"
                 >
                   <Form.Control
-                    // ref={usernameEl}
+                    ref={usernameEl}
                     name="username"
                     autoComplete="username"
                     placeholder={t('errors.usernameLength')}
-                    id="username"
                     className={formik.touched.username && (formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.username) ? 'is-invalid' : ''}
                     required
                     value={formik.values.username}
@@ -107,13 +107,13 @@ const SignupPage = () => {
                 <FloatingLabel
                   className="mb-4"
                   label={t('forms.password')}
+                  controlId="password"
                 >
                   <Form.Control
                     name="password"
                     aria-describedby="passwordHelpBlock"
                     autoComplete="new-password"
                     placeholder={t('errors.passwordLength')}
-                    id="password"
                     type="password"
                     className={formik.touched.password && (formik.errors.confirmPassword === t('errors.userAlreadyExists') || formik.errors.password) ? 'is-invalid' : ''}
                     required
@@ -128,12 +128,12 @@ const SignupPage = () => {
                 <FloatingLabel
                   className="mb-4"
                   label={t('forms.confirmPassword')}
+                  controlId="confirmPassword"
                 >
                   <Form.Control
                     name="confirmPassword"
                     autoComplete="new-password"
-                    placeholder={t('errors.passwordNotMatch')}
-                    id="confirmPassword"
+                    placeholder={t('errors.passwordShouldMatch')}
                     type="password"
                     isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
                     required
