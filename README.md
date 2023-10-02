@@ -1,2 +1,42 @@
-### Hexlet tests and linter status:
+# Hexlet's [Slack Chat] (https://slack-chat-xr7s.onrender.com/) alike study project:
+
 [![Actions Status](https://github.com/MaxGre99/frontend-bootcamp-project-12/workflows/hexlet-check/badge.svg)](https://github.com/MaxGre99/frontend-bootcamp-project-12/actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c93b3451e09debd3845d/maintainability)](https://codeclimate.com/github/MaxGre99/Slack-Chat/maintainability)
+
+## Description: 
+
+A very sumplified version of Slack Chat. Here you can:
+* login users and create new ones:
+* create, rename and remove channels
+* and, you know, chat :)
+
+## Tech Stack:
+
+* React
+* React Router DOM
+* React Bootstrap
+* React i18next
+* React Toastify 
+* Redux Toolkit
+* Formik
+* Yup
+* Axios
+* Leo Profanity
+
+## Installation:
+
+ ### Requirements:
+  - Mac / Linux
+  - Node.js [>=16.x]
+
+  ### Dependencies:
+  make install
+
+  ### Build (and dependencies also):
+  make build
+
+  ### Server Start:
+  make start
+
+  ### Lint:
+  make lint-frontend
