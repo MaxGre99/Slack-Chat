@@ -124,7 +124,8 @@ const MainPage = () => {
       .addEventListener('keydown', (event) => {
         if (event.code === 'Enter' || event.code === 'NumpadEnter') {
           event.preventDefault();
-          document.getElementById('submit').click();
+          // document.getElementById('submit').click();
+          // console.log('KURWA');
         }
       });
   }, []);
