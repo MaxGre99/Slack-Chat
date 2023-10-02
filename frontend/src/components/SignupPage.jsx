@@ -86,7 +86,7 @@ const SignupPage = () => {
                 <h1 className="text-center mb-4">{t('descriptions.registration')}</h1>
                 <FloatingLabel
                   className="mb-3"
-                  label={t('forms.username')}
+                  label="Имя пользователя"
                 >
                   <Form.Control
                     ref={usernameEl}
@@ -106,7 +106,7 @@ const SignupPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label={t('forms.password')}
+                  label="Пароль"
                 >
                   <Form.Control
                     name="password"
@@ -127,7 +127,7 @@ const SignupPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label={t('forms.confirmPassword')}
+                  label="Подтвердите пароль"
                 >
                   <Form.Control
                     name="confirmPassword"
