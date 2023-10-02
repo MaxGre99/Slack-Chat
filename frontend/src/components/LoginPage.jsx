@@ -102,7 +102,9 @@ const LoginPage = () => {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                   />
-                  {formik.errors.password && (<div className="invalid-tooltip">{formik.errors.password}</div>)}
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    {formik.errors.password}
+                  </Form.Control.Feedback>
                 </FloatingLabel>
                 <Button type="submit" variant="outline-primary" className="w-100 mb-3">
                   {t('buttons.login')}

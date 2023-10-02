@@ -98,9 +98,11 @@ const SignupPage = () => {
                     required
                     value={formik.values.username}
                     onBlur={formik.handleBlur}
-                    onChange={(e) => { formik.handleChange(e); formik.setFieldTouched('username', true); }}
+                    onChange={formik.handleChange}
                   />
-                  {formik.errors.username && (<div className="invalid-tooltip">{formik.touched.username && formik.errors.username}</div>)}
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    {formik.errors.username}
+                  </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
@@ -117,9 +119,11 @@ const SignupPage = () => {
                     required
                     value={formik.values.password}
                     onBlur={formik.handleBlur}
-                    onChange={(e) => { formik.handleChange(e); formik.setFieldTouched('password', true); formik.setFieldTouched('confirmPassword', true); }}
+                    onChange={formik.handleChange}
                   />
-                  {formik.errors.password && (<div className="invalid-tooltip">{formik.touched.password && formik.errors.password}</div>)}
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    {formik.errors.password}
+                  </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
@@ -135,9 +139,11 @@ const SignupPage = () => {
                     required
                     value={formik.values.confirmPassword}
                     onBlur={formik.handleBlur}
-                    onChange={(e) => { formik.handleChange(e); formik.setFieldTouched('confirmPassword', true); }}
+                    onChange={formik.handleChange}
                   />
-                  {formik.errors.confirmPassword && (<div className="invalid-tooltip">{formik.touched.confirmPassword && formik.errors.confirmPassword}</div>)}
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    {formik.errors.confirmPassword}
+                  </Form.Control.Feedback>
                 </FloatingLabel>
                 <Button type="submit" variant="outline-primary" className="w-100">
                   {t('buttons.register')}
