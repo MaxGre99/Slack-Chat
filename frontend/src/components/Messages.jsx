@@ -103,7 +103,7 @@ const MessagesBox = ({
                 className="border-0 p-0 ps-2"
                 value={formik.values.body}
                 onChange={formik.handleChange}
-                disabled={isSending}
+                // disabled={isSending}
               />
               <Button type="submit" variant="group-vertical" disabled={formik.values.body.length === 0 && true}/* id="submit" */>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
