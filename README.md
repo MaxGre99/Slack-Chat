@@ -1,5 +1,5 @@
 # Hexlet's [Slack Chat](https://slack-chat-xr7s.onrender.com/) alike study project:
-[![Actions Status](https://github.com/MaxGre99/Slack-Chat/workflows/hexlet-check/badge.svg)](https://github.com/MaxGre99/Slack-Chat/actions)
+[![hexlet-check](https://github.com/MaxGre99/Slack-Chat/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/MaxGre99/Slack-Chat/actions/workflows/hexlet-check.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c93b3451e09debd3845d/maintainability)](https://codeclimate.com/github/MaxGre99/Slack-Chat/maintainability)
 
 ## Description: 
