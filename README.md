@@ -24,14 +24,18 @@ A very sumplified version of Slack Chat. Here you can:
 * Leo Profanity
 
 ## Installation:
- ### Requirements:
-  - Mac / Linux
-  - Node.js [>=16.x]
+  ### Requirements:
+    - Mac / Linux
+    - Node.js [>=16.x]
+
   ### Dependencies:
-  make install
+    make install
+
   ### Build (and dependencies also):
-  make build
+    make build
+
   ### Server Start:
-  make start
+    make start
+
   ### Lint:
-  make lint-frontend
+    make lint-frontend
