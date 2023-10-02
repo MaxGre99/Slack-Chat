@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
@@ -18,8 +18,8 @@ import logo from '../public/Регистрация.jpg';
 
 const SignupPage = () => {
   const { t } = useTranslation();
-  const usernameEl = useRef(null);
-  useEffect(() => usernameEl.current.focus(), []);
+  // const usernameEl = useRef(null);
+  // useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -58,7 +58,7 @@ const SignupPage = () => {
       } catch (err) {
         if (err.response.status === 409) {
           formik.setFieldError('confirmPassword', t('errors.userAlreadyExists'));
-          usernameEl.current.select();
+          // usernameEl.current.select();
         }
       }
     },
@@ -86,10 +86,10 @@ const SignupPage = () => {
                 <h1 className="text-center mb-4">{t('descriptions.registration')}</h1>
                 <FloatingLabel
                   className="mb-3"
-                  label="Имя пользователя"
+                  label={t('forms.username')}
                 >
                   <Form.Control
-                    ref={usernameEl}
+                    // ref={usernameEl}
                     name="username"
                     autoComplete="username"
                     placeholder={t('errors.usernameLength')}
@@ -106,7 +106,7 @@ const SignupPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label="Пароль"
+                  label={t('forms.password')}
                 >
                   <Form.Control
                     name="password"
@@ -127,7 +127,7 @@ const SignupPage = () => {
                 </FloatingLabel>
                 <FloatingLabel
                   className="mb-4"
-                  label="Подтвердите пароль"
+                  label={t('forms.confirmPassword')}
                 >
                   <Form.Control
                     name="confirmPassword"
