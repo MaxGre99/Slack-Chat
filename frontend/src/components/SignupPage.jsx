@@ -64,6 +64,12 @@ const SignupPage = () => {
     },
   });
 
+  /* useEffect(() => {
+    formik.setFieldTouched('username', true);
+    formik.setFieldTouched('password', true);
+    formik.setFieldTouched('confirmPassword', true);
+  }, []); */
+
   return (
     <Container fluid className="h-100">
       <Row className="justify-content-center align-content-center h-100">
@@ -92,7 +98,7 @@ const SignupPage = () => {
                     required
                     value={formik.values.username}
                     onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
+                    onChange={(e) => { formik.handleChange(e); formik.setFieldTouched('username', true); }}
                   />
                   {formik.errors.username && (<div className="invalid-tooltip">{formik.touched.username && formik.errors.username}</div>)}
                 </FloatingLabel>
@@ -111,7 +117,7 @@ const SignupPage = () => {
                     required
                     value={formik.values.password}
                     onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
+                    onChange={(e) => { formik.handleChange(e); formik.setFieldTouched('password', true); formik.setFieldTouched('confirmPassword', true); }}
                   />
                   {formik.errors.password && (<div className="invalid-tooltip">{formik.touched.password && formik.errors.password}</div>)}
                 </FloatingLabel>
@@ -129,7 +135,7 @@ const SignupPage = () => {
                     required
                     value={formik.values.confirmPassword}
                     onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
+                    onChange={(e) => { formik.handleChange(e); formik.setFieldTouched('confirmPassword', true); }}
                   />
                   {formik.errors.confirmPassword && (<div className="invalid-tooltip">{formik.touched.confirmPassword && formik.errors.confirmPassword}</div>)}
                 </FloatingLabel>
