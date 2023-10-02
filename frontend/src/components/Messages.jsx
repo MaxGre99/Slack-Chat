@@ -18,8 +18,12 @@ const MessagesBox = ({
 }) => {
   const messageInput = useRef();
   const [isSending, setSendingState] = useState(false);
+  const [chosenMessages, setChosenMessages] = useState([]);
   const allMessages = useSelector((state) => Object.values(state.messagesReducer.entities));
-  const chosenMessages = allMessages.filter((message) => message.channelId === chosenChannel.id);
+  const viewedMessages = allMessages.filter((message) => message.channelId === chosenChannel.id);
+  useEffect(() => {
+    setChosenMessages(viewedMessages);
+  }, [viewedMessages]);
 
   // Настройки формы для сообщений
   const formik = useFormik({
