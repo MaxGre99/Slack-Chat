@@ -7,19 +7,19 @@ import {
   Button,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { selectors as messageSelectors } from '../slices/messagesSlice';
+import { selectors as messagesSelectors } from '../slices/messagesSlice';
 
 const MessagesBox = ({
   chosenChannel,
   userId,
   socket,
-  // filter,
+  filter,
   errorNotify,
   t,
 }) => {
   const messageInput = useRef();
   const [isSending, setSendingState] = useState(false);
-  const chosenMessages = useSelector(messageSelectors.selectAll)
+  const chosenMessages = useSelector(messagesSelectors.selectAll)
     .filter((message) => message.channelId === chosenChannel.id);
 
   // useEffect для скролла вниз
@@ -37,7 +37,11 @@ const MessagesBox = ({
     },
     onSubmit: (values) => {
       setSendingState(true);
-      socket.emit('newMessage', values, (confirmation) => {
+      socket.emit('newMessage', {
+        body: filter.clean(values.body),
+        channelId: values.channelId,
+        username: userId.name,
+      }, (confirmation) => {
         if (confirmation.status === 'ok') {
           setSendingState(false);
           formik.resetForm();
