@@ -7,6 +7,7 @@ import {
   Button,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
+import { selectors as messageSelectors } from '../slices/messagesSlice';
 
 const MessagesBox = ({
   chosenChannel,
@@ -18,8 +19,14 @@ const MessagesBox = ({
 }) => {
   const messageInput = useRef();
   const [isSending, setSendingState] = useState(false);
-  const allMessages = useSelector((state) => Object.values(state.messagesReducer.entities));
-  const chosenMessages = allMessages.filter((message) => message.channelId === chosenChannel.id);
+  const chosenMessages = useSelector(messageSelectors.selectAll)
+    .filter((message) => message.channelId === chosenChannel.id);
+
+  // useEffect для скролла вниз
+  const messagesBox = useRef();
+  useEffect(() => {
+    messagesBox.current.scrollTop = messagesBox.current.scrollHeight;
+  }, [chosenMessages]);
 
   // Настройки формы для сообщений
   const formik = useFormik({
@@ -37,12 +44,11 @@ const MessagesBox = ({
       }, (confirmation) => {
         if (confirmation.status === 'ok') {
           setSendingState(false);
+          formik.resetForm();
         } else {
           errorNotify(t('errors.connectionError'));
         }
       });
-      formik.setFieldValue('body', '');
-      // messageInput.current.focus();
     },
   });
 
@@ -64,9 +70,9 @@ const MessagesBox = ({
       formik.setFieldValue('channelId', chosenChannel.id);
       messageInput.current.focus();
     }
-  }, [chosenChannel]);
+  }, [chosenChannel, isSending]);
 
-  // Набор useEffect'ов и функций для скролла вниз
+  /* Набор useEffect'ов и функций для скролла вниз
   const messagesBoxRef = useRef(null);
   useEffect(() => {
     messagesBoxRef.current = document.getElementById('messages-box');
@@ -80,7 +86,7 @@ const MessagesBox = ({
 
   useEffect(() => {
     scrollToBottomMessages();
-  }, [chosenMessages]);
+  }, [chosenMessages]); */
 
   return (
     <Col className="p-0 h-100">
@@ -97,11 +103,12 @@ const MessagesBox = ({
             {t('count.messageCount', { count: chosenMessages.length })}
           </span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5">
+        <div id="messages-box" ref={messagesBox} className="chat-messages overflow-auto px-5">
           {chosenMessages.map((message) => (
             <div className="text-break mb-2" key={message.id}>
               <b>{message.username}</b>
               :
+              &nbsp;
               {message.body}
             </div>
           ))}
