@@ -17,7 +17,7 @@ import filter from 'leo-profanity';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import Channels from './Channels';
-import MessagesBox from './Messages';
+import MessagesBox from './MessagesBox';
 import getModal from '../modals/index.js';
 
 // Инициализация сокета
