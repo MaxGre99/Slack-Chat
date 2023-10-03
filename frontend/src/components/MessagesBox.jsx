@@ -13,7 +13,7 @@ const MessagesBox = ({
   chosenChannel,
   userId,
   socket,
-  filter,
+  // filter,
   errorNotify,
   t,
 }) => {
@@ -35,13 +35,9 @@ const MessagesBox = ({
       channelId: chosenChannel.id,
       username: userId.name,
     },
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       setSendingState(true);
-      await socket.emit('newMessage', {
-        body: filter.clean(values.body),
-        channelId: values.channelId,
-        username: values.username,
-      }, (confirmation) => {
+      socket.emit('newMessage', values, (confirmation) => {
         if (confirmation.status === 'ok') {
           setSendingState(false);
           formik.resetForm();
@@ -95,7 +91,7 @@ const MessagesBox = ({
           <p className="m-0">
             <b>
               #
-              {' '}
+              &nbsp;
               {chosenChannel.name}
             </b>
           </p>
