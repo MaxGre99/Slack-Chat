@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
+import useSocket from '../hooks/useSocket';
 
 // LeoProfanity
 filter.add(filter.getDictionary('en'));
@@ -17,7 +18,6 @@ filter.add(filter.getDictionary('ru'));
 
 const Rename = ({
   onClose,
-  socket,
   chosenChannel,
   successNotify,
   errorNotify,
@@ -27,6 +27,12 @@ const Rename = ({
   const renameChannelInput = useRef();
   useEffect(() => renameChannelInput.current.select(), []);
 
+  const socket = useSocket();
+  const callback = () => {
+    onClose();
+    successNotify(t('toasts.renameChannel'));
+  };
+
   const channelsNames = allChannels.map((channel) => channel.name);
 
   const validationSchema = yup.object().shape({
@@ -35,19 +41,15 @@ const Rename = ({
 
   const formik = useFormik({
     initialValues: {
-      id: chosenChannel.id,
       name: chosenChannel.name,
     },
     validationSchema,
     onSubmit: (values) => {
-      socket.emit('renameChannel', { id: values.id, name: filter.clean(values.name) }, (response) => {
-        if (response.status === 'ok') {
-          onClose();
-          successNotify(t('toasts.renameChannel'));
-        } else {
-          errorNotify(t('errors.connectionError'));
-        }
-      });
+      try {
+        socket.renameChannel(chosenChannel.id, filter.clean(values.name), callback);
+      } catch (err) {
+        errorNotify(t('errors.connectionError'));
+      }
     },
   });
 

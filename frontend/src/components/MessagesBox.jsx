@@ -7,12 +7,12 @@ import {
   Button,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
+import useSocket from '../hooks/useSocket';
 import { selectors as messagesSelectors } from '../slices/messagesSlice';
 
 const MessagesBox = ({
   chosenChannel,
   userId,
-  socket,
   filter,
   errorNotify,
   t,
@@ -21,6 +21,9 @@ const MessagesBox = ({
   const [isSending, setSendingState] = useState(false);
   const chosenMessages = useSelector(messagesSelectors.selectAll)
     .filter((message) => message.channelId === chosenChannel.id);
+
+  const socket = useSocket();
+  const callback = (formik) => formik.resetForm();
 
   // useEffect для скролла вниз
   const messagesBox = useRef();
@@ -32,23 +35,22 @@ const MessagesBox = ({
   const formik = useFormik({
     initialValues: {
       body: '',
-      channelId: chosenChannel.id,
-      username: userId.name,
+      // channelId: chosenChannel.id,
+      // username: userId.name,
     },
     onSubmit: (values) => {
-      setSendingState(true);
-      socket.emit('newMessage', {
-        body: filter.clean(values.body),
-        channelId: values.channelId,
-        username: userId.name,
-      }, (confirmation) => {
-        if (confirmation.status === 'ok') {
-          setSendingState(false);
-          formik.resetForm();
-        } else {
-          errorNotify(t('errors.connectionError'));
-        }
-      });
+      try {
+        setSendingState(true);
+        socket.addMessage(
+          filter.clean(values.body),
+          chosenChannel.id,
+          userId.name,
+          () => callback(formik),
+        );
+        setSendingState(false);
+      } catch (err) {
+        errorNotify(t('errors.connectionError'));
+      }
     },
   });
 

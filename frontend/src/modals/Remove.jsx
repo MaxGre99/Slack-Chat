@@ -1,16 +1,23 @@
 import React from 'react';
 import { Modal, Button, CloseButton } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import useSocket from '../hooks/useSocket';
 
 const Rename = ({
   onClose,
-  socket,
   chosenChannel,
   setGeneralChannel,
   successNotify,
   errorNotify,
 }) => {
   const { t } = useTranslation();
+  const socket = useSocket();
+  const callback = () => {
+    onClose();
+    setGeneralChannel();
+    successNotify(t('toasts.removeChannel'));
+  };
+
   return (
     <Modal centered show onHide={() => onClose()}>
       <Modal.Header>
@@ -30,15 +37,11 @@ const Rename = ({
           <Button
             variant="danger"
             onClick={() => {
-              socket.emit('removeChannel', { id: chosenChannel.id }, (response) => {
-                if (response.status === 'ok') {
-                  onClose();
-                  setGeneralChannel();
-                  successNotify(t('toasts.removeChannel'));
-                } else {
-                  errorNotify(t('errors.connectionError'));
-                }
-              });
+              try {
+                socket.removeChannel(chosenChannel.id, callback);
+              } catch (err) {
+                errorNotify(t('errors.connectionError'));
+              }
             }}
           >
             {t('modals.submit')}

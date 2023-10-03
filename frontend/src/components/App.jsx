@@ -3,90 +3,44 @@ import {
   Routes,
   Route,
   Link,
-  Navigate,
-  useLocation,
 } from 'react-router-dom';
-import { Button, Container, Navbar } from 'react-bootstrap';
-import React, { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Container, Navbar } from 'react-bootstrap';
+import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AuthContext from '../contexts/AuthContext';
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
 import ErrorPage from './ErrorPage';
 import SignupPage from './SignupPage';
-import useAuth from '../hooks/useAuth';
-
-const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState('userId' in localStorage);
-
-  const contextValue = useMemo(() => {
-    const logIn = () => setLoggedIn(true);
-    const logOut = () => {
-      localStorage.clear();
-      setLoggedIn(false);
-    };
-    return { loggedIn, logIn, logOut };
-  }, [loggedIn]); // Include any dependencies that affect the context value
-
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
-};
-
-const LoggedInRoute = ({ children }) => {
-  const { loggedIn } = useAuth();
-  const location = useLocation();
-  return loggedIn ? (
-    children
-  ) : (
-    <Navigate to="/login" state={{ from: location }} />
-  );
-};
-
-const LogOutButton = () => {
-  const { loggedIn, logOut } = useAuth();
-  const { t } = useTranslation();
-
-  return (
-    loggedIn && (
-      <Button type="button" onClick={logOut}>
-        {t('buttons.logout')}
-      </Button>
-    )
-  );
-};
+import { LoggedInRoute, LogOutButton } from '../providers/AuthProvider';
 
 const App = () => (
-  <AuthProvider>
-    <BrowserRouter>
-      <div className="d-flex flex-column h-100">
-        <Navbar className="shadow-sm" bg="white" expand="lg">
-          <Container>
-            <Navbar.Brand as={Link} to="/">
-              Hexlet Chat
-            </Navbar.Brand>
-            <LogOutButton />
-          </Container>
-        </Navbar>
-        <Routes>
-          <Route path="*" element={<ErrorPage />} />
-          <Route
-            path="/"
-            element={(
-              <LoggedInRoute>
-                <MainPage />
-              </LoggedInRoute>
-            )}
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-        </Routes>
-      </div>
-      <ToastContainer />
-    </BrowserRouter>
-  </AuthProvider>
+  <BrowserRouter>
+    <div className="d-flex flex-column h-100">
+      <Navbar className="shadow-sm" bg="white" expand="lg">
+        <Container>
+          <Navbar.Brand as={Link} to="/">
+            Hexlet Chat
+          </Navbar.Brand>
+          <LogOutButton />
+        </Container>
+      </Navbar>
+      <Routes>
+        <Route path="*" element={<ErrorPage />} />
+        <Route
+          path="/"
+          element={(
+            <LoggedInRoute>
+              <MainPage />
+            </LoggedInRoute>
+          )}
+        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </div>
+    <ToastContainer />
+  </BrowserRouter>
 );
 
 export default App;

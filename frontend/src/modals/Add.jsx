@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
+import useSocket from '../hooks/useSocket';
 
 // LeoProfanity
 filter.add(filter.getDictionary('en'));
@@ -17,7 +18,6 @@ filter.add(filter.getDictionary('ru'));
 
 const Add = ({
   onClose,
-  socket,
   successNotify,
   errorNotify,
   allChannels,
@@ -25,6 +25,13 @@ const Add = ({
   const { t } = useTranslation();
   const addChannelInput = useRef();
   useEffect(() => addChannelInput.current.focus(), []);
+
+  const socket = useSocket();
+
+  const callback = () => {
+    onClose();
+    successNotify(t('toasts.addChannel'));
+  };
 
   const channelsNames = allChannels.map((channel) => channel.name);
 
@@ -38,14 +45,11 @@ const Add = ({
     },
     validationSchema,
     onSubmit: (values) => {
-      socket.emit('newChannel', { name: filter.clean(values.name) }, (response) => {
-        if (response.status === 'ok') {
-          onClose();
-          successNotify(t('toasts.addChannel'));
-        } else {
-          errorNotify(t('errors.connectionError'));
-        }
-      });
+      try {
+        socket.addChannel(filter.clean(values.name), callback);
+      } catch (err) {
+        errorNotify(t('errors.connectionError'));
+      }
     },
   });
 

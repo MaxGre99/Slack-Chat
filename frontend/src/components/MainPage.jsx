@@ -9,7 +9,6 @@ import {
   // InputGroup,
 } from 'react-bootstrap';
 import axios from 'axios';
-import io from 'socket.io-client';
 // import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -19,9 +18,6 @@ import { actions as messagesActions } from '../slices/messagesSlice';
 import Channels from './Channels';
 import MessagesBox from './MessagesBox';
 import getModal from '../modals/index.js';
-
-// Инициализация сокета
-const socket = io('http://localhost:3000');
 
 // Toastify
 const successNotify = (text) => {
@@ -76,21 +72,6 @@ const MainPage = () => {
     };
     fetchData();
   }, []);
-
-  // Cокеты
-  socket.on('newMessage', (message) => {
-    dispatch(messagesActions.addMessage(message));
-  });
-  socket.on('newChannel', (channel) => {
-    dispatch(channelsActions.addChannel(channel));
-    setChosenChannel(channel);
-  });
-  socket.on('renameChannel', (channel) => {
-    dispatch(channelsActions.upsertChannel(channel));
-  });
-  socket.on('removeChannel', ({ id }) => {
-    dispatch(channelsActions.removeChannel(id));
-  });
 
   // Функции и настройки для модальных окон
   const [modalType, setModal] = useState('');
@@ -150,7 +131,6 @@ const MainPage = () => {
         <MessagesBox
           chosenChannel={chosenChannel}
           userId={userId}
-          socket={socket}
           filter={filter}
           errorNotify={errorNotify}
           t={t}
@@ -159,7 +139,6 @@ const MainPage = () => {
       {modalIsOpen && (
         <ModalComponent
           onClose={onClose}
-          socket={socket}
           chosenChannel={chosenChannel}
           setGeneralChannel={setGeneralChannel}
           successNotify={successNotify}
