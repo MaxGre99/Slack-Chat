@@ -8,13 +8,8 @@ import {
   CloseButton,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import filter from 'leo-profanity';
+// import filter from 'leo-profanity';
 import useSocket from '../hooks/useSocket';
-
-// LeoProfanity
-filter.add(filter.getDictionary('en'));
-filter.add(filter.getDictionary('fr'));
-filter.add(filter.getDictionary('ru'));
 
 const Rename = ({
   onClose,
@@ -22,6 +17,7 @@ const Rename = ({
   successNotify,
   errorNotify,
   allChannels,
+  filter,
 }) => {
   const { t } = useTranslation();
   const renameChannelInput = useRef();

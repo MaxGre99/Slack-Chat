@@ -36,7 +36,7 @@ const SocketProvider = ({ children }) => {
   const addChannel = (name, callback) => {
     socket.emit('newChannel', { name }, (response) => {
       if (response.status === 'ok') {
-        callback(response.data.id);
+        callback(response.data);
       }
     });
   };
