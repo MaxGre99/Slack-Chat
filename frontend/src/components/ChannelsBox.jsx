@@ -34,7 +34,6 @@ const RemovableChannelButton = ({
         <span className="me-1">#</span>
         {channel.name}
       </Button>
-      {/* !!! */}
       <Dropdown.Toggle
         id={channel.id}
         className="flex-grow-0 dropdown-toggle-split"

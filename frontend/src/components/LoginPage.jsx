@@ -15,14 +15,15 @@ import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import logo from '../public/Авторизация.jpeg';
+import routes from '../routes';
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const usernameEl = useRef(null);
   useEffect(() => usernameEl.current.focus(), []);
   const validationSchema = yup.object().shape({
-    username: yup.string().trim(), // .required(t('errors.required')),
-    password: yup.string().trim(), // .required(t('errors.required')),
+    username: yup.string().trim(),
+    password: yup.string().trim(),
   });
 
   const { logIn } = useAuth();
@@ -36,7 +37,7 @@ const LoginPage = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/login', values);
+        const response = await axios.post(routes.loginPath(), values);
         if (response.status === 200) {
           localStorage.setItem(
             'userId',
@@ -46,7 +47,7 @@ const LoginPage = () => {
             }),
           );
           logIn();
-          navigate('/');
+          navigate(routes.mainPage());
         }
       } catch (err) {
         if (err.response.status === 401) {
@@ -114,7 +115,7 @@ const LoginPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('descriptions.noAccount')}</span>
-                <a href="/signup">{t('descriptions.registration')}</a>
+                <a href={routes.signUpPage()}>{t('descriptions.registration')}</a>
               </div>
             </Card.Footer>
           </Card>

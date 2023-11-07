@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  Row,
-  // Col,
-  // Button,
-  // Form,
-  // InputGroup,
-} from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import axios from 'axios';
-// import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
@@ -18,6 +10,7 @@ import { actions as messagesActions } from '../slices/messagesSlice';
 import ChannelsBox from './ChannelsBox';
 import MessagesBox from './MessagesBox';
 import getModal from '../modals/index.js';
+import routes from '../routes';
 
 // Toastify
 const successNotify = (text) => {
@@ -61,7 +54,7 @@ const MainPage = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/v1/data', config);
+        const response = await axios.get(routes.getData(), config);
         const { channels, messages, currentChannelId } = response.data;
         dispatch(channelsActions.addChannels(channels));
         dispatch(messagesActions.addMessages(messages));
@@ -78,23 +71,6 @@ const MainPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(modalType !== '');
   const onClose = () => setModalIsOpen(!modalIsOpen);
   const ModalComponent = getModal(modalType);
-
-  /* Набор useEffect'ов и функций для скролла вниз
-  const channelsBoxRef = useRef(null);
-
-  useEffect(() => {
-    channelsBoxRef.current = document.getElementById('channels-box');
-  }, []);
-
-  const scrollToBottomChannels = () => {
-    if (channelsBoxRef.current) {
-      channelsBoxRef.current.scrollTop = channelsBoxRef.current.scrollHeight;
-    }
-  };
-
-  useEffect(() => {
-    scrollToBottomChannels();
-  }, [allChannels]); */
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">

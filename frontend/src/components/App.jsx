@@ -11,32 +11,33 @@ import 'react-toastify/dist/ReactToastify.css';
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
 import ErrorPage from './ErrorPage';
-import SignupPage from './SignupPage';
+import SignUpPage from './SignUpPage';
 import { LoggedInRoute, LogOutButton } from '../providers/AuthProvider';
+import routes from '../routes';
 
 const App = () => (
   <BrowserRouter>
     <div className="d-flex flex-column h-100">
       <Navbar className="shadow-sm" bg="white" expand="lg">
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to={routes.mainPage()}>
             Hexlet Chat
           </Navbar.Brand>
           <LogOutButton />
         </Container>
       </Navbar>
       <Routes>
-        <Route path="*" element={<ErrorPage />} />
+        <Route path={routes.notFoundPage()} element={<ErrorPage />} />
         <Route
-          path="/"
+          path={routes.mainPage()}
           element={(
             <LoggedInRoute>
               <MainPage />
             </LoggedInRoute>
           )}
         />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path={routes.loginPage()} element={<LoginPage />} />
+        <Route path={routes.signUpPage()} element={<SignUpPage />} />
       </Routes>
     </div>
     <ToastContainer />

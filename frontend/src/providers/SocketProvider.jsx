@@ -9,7 +9,6 @@ const socket = io();
 
 const SocketProvider = ({ children }) => {
   const dispatch = useDispatch();
-  // const messages = useSelector(messagesSelectors.selectAll);
 
   socket.on('newChannel', (payload) => {
     dispatch(channelsActions.addChannel(payload));
@@ -17,10 +16,6 @@ const SocketProvider = ({ children }) => {
 
   socket.on('removeChannel', (payload) => {
     const { id } = payload;
-    // const messagesOfRemovedChannel = messages
-    // .filter((message) => message.channelId === id)
-    // .map((message) => message.id);
-    // dispatch(messagesActions.removeMessages(messagesOfRemovedChannel));
     dispatch(channelsActions.removeChannel(id));
   });
 
@@ -29,7 +24,6 @@ const SocketProvider = ({ children }) => {
   });
 
   socket.on('renameChannel', (payload) => {
-    // const { id, name } = payload;
     dispatch(channelsActions.upsertChannel(payload));
   });
 

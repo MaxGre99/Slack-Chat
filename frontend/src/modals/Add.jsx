@@ -8,7 +8,6 @@ import {
   CloseButton,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-// import filter from 'leo-profanity';
 import useSocket from '../hooks/useSocket';
 
 const Add = ({

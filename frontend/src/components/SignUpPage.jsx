@@ -15,8 +15,9 @@ import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import logo from '../public/Регистрация.jpg';
+import routes from '../routes';
 
-const SignupPage = () => {
+const SignUpPage = () => {
   const { t } = useTranslation();
   const usernameEl = useRef(null);
   useEffect(() => usernameEl.current.focus(), []);
@@ -43,7 +44,7 @@ const SignupPage = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/signup', values);
+        const response = await axios.post(routes.signUp(), values);
         if (response.status === 201) {
           localStorage.setItem(
             'userId',
@@ -53,7 +54,7 @@ const SignupPage = () => {
             }),
           );
           logIn();
-          navigate('/');
+          navigate(routes.mainPage());
         }
       } catch (err) {
         if (err.response.status === 409) {
@@ -63,12 +64,6 @@ const SignupPage = () => {
       }
     },
   });
-
-  /* useEffect(() => {
-    formik.setFieldTouched('username', true);
-    formik.setFieldTouched('password', true);
-    formik.setFieldTouched('confirmPassword', true);
-  }, []); */
 
   return (
     <Container fluid className="h-100">
@@ -157,4 +152,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SignUpPage;

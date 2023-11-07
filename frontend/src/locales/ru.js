@@ -16,10 +16,15 @@ export default {
     descriptions: {
       hexlet: 'Хекслет Чат',
       channelControl: 'Управление каналом',
-      notFound: '404 (не найдено)',
+      notFound: 'Упс! Ошибка 404. Данной страницы не существует',
       login: 'Войти',
       noAccount: 'Нет аккаунта? ',
       registration: 'Регистрация',
+      error404: 'Ошибка 404',
+      oops: 'Упс!',
+      noPage: 'Похоже данной страницы пока не существует. Код ошибки: 404.',
+      redirect: 'Но вы можете перейти ',
+      toMainpage: 'на главную страницу',
     },
     forms: {
       nickname: 'Ваш ник',

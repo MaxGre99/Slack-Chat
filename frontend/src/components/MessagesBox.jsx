@@ -35,8 +35,6 @@ const MessagesBox = ({
   const formik = useFormik({
     initialValues: {
       body: '',
-      // channelId: chosenChannel.id,
-      // username: userId.name,
     },
     onSubmit: (values) => {
       try {
@@ -54,18 +52,6 @@ const MessagesBox = ({
     },
   });
 
-  /* useEffect(() => {
-    document
-      .getElementById('input')
-      .addEventListener('keydown', (event) => {
-        if (event.code === 'Enter' || event.code === 'NumpadEnter') {
-          event.preventDefault();
-          document.getElementById('submit').click();
-          console.log('KURWA');
-        }
-      });
-  }, []); */
-
   // useEffect на слежку за выбранным каналом + фокус-инпут (т.к. фокус тоже нужен при смене канала)
   useEffect(() => {
     if (chosenChannel && chosenChannel.id) {
@@ -73,22 +59,6 @@ const MessagesBox = ({
       messageInput.current.focus();
     }
   }, [chosenChannel, isSending]);
-
-  /* Набор useEffect'ов и функций для скролла вниз
-  const messagesBoxRef = useRef(null);
-  useEffect(() => {
-    messagesBoxRef.current = document.getElementById('messages-box');
-  }, []);
-
-  const scrollToBottomMessages = () => {
-    if (messagesBoxRef.current) {
-      messagesBoxRef.current.scrollTop = messagesBoxRef.current.scrollHeight;
-    }
-  };
-
-  useEffect(() => {
-    scrollToBottomMessages();
-  }, [chosenMessages]); */
 
   return (
     <Col className="p-0 h-100">
@@ -119,7 +89,6 @@ const MessagesBox = ({
           <Form noValidate className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
             <InputGroup hasValidation={formik.values.body.length === 0 && true}>
               <Form.Control
-                // id="input"
                 ref={messageInput}
                 name="body"
                 aria-label={t('forms.newMessage')}
@@ -129,7 +98,7 @@ const MessagesBox = ({
                 onChange={formik.handleChange}
                 disabled={isSending}
               />
-              <Button type="submit" variant="group-vertical" disabled={formik.values.body.length === 0 && true}/* id="submit" */>
+              <Button type="submit" variant="group-vertical" disabled={formik.values.body.length === 0 && true}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                   <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
                 </svg>
